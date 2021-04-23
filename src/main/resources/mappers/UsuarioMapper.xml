@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="br.edu.ifma.travis.mapper.UsuarioMapper">
+    <resultMap id="telefone" type="br.edu.ifma.travis.model.Telefone">
+        <result property="codigo" column="code"/>
+        <result property="numero" column="numero"/>
+    </resultMap>
+    <resultMap id="endereco" type="br.edu.ifma.travis.model.Endereco">
+        <id column="id" property="id"/>
+        <result property="cep" column="cep"/>
+        <result property="logradouro" column="logradouro"/>
+        <result property="bairro" column="bairro"/>
+        <result property="cidade" column="cidade"/>
+        <result property="uf" column="uf"/>
+    </resultMap>
+    <resultMap id="usuario" type="br.edu.ifma.travis.model.Usuario">
+        <id property="id" column="id"/>
+        <result property="cpf" column="cpf"/>
+        <result property="nome" column="nome"/>
+        <result property="sexo" column="sexo" typeHandler="br.edu.ifma.travis.mapper.typehandler.GeneroTypeHandler"/>
+        <result property="tipoUsuario" column="tipo"
+                typeHandler="br.edu.ifma.travis.mapper.typehandler.TipoUsuarioTypeHandler"/>
+        <result property="email" column="email"/>
+        <result property="curso" column="curso"/>
+        <result property="codigo" column="codigo"/>
+        <result property="empresa" column="empresa"/>
+        <result property="setor" column="setor"/>
+        <association property="endereco" resultMap="endereco"/>
+        <collection property="telefone" resultMap="telefone"/>
+        <collection property="veiculos" resultMap="br.edu.ifma.travis.mapper.VeiculoMapper.veiculo"/>
+    </resultMap>
+
+    <insert id="insertEndereco" useGeneratedKeys="true" keyProperty="id">
+        insert into enderecos(cep, logradouro, bairro, cidade, uf)
+        values (#{endereco.cep}, #{endereco.logradouro},
+                #{endereco.bairro}, #{endereco.cidade}, #{endereco.uf});
+    </insert>
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into usuarios(cpf, nome, sexo, tipo, curso, codigo, empresa, setor, email, endereco_id)
+        values (#{usuario.cpf},
+                #{usuario.nome},
+                #{usuario.sexo},
+                #{usuario.tipoUsuario},
+                #{usuario.curso},
+                #{usuario.codigo},
+                #{usuario.empresa},
+                #{usuario.setor},
+                #{usuario.email},
+                #{usuario.endereco.id});
+    </insert>
+    <insert id="insertTelefone">
+        insert into telefones(codigo, numero, usuario_id)
+        values (#{telefone.codigo}, #{telefone.numero}, #{id});
+    </insert>
+
+    <update id="update">
+
+    </update>
+
+    <delete id="delete">
+        DELETE
+        from usuarios
+        where id = #{id}
+        limit 1
+    </delete>
+    <delete id="deleteEndereco">
+        delete
+        from enderecos
+        where id = #{id}
+        limit 1
+    </delete>
+    <delete id="deleteTelefone">
+        delete
+        from telefones
+        where usuario_id = #{id}
+        limit 1
+    </delete>
+
+    <select id="findAll" resultMap="usuario">
+        SELECT *
+        FROM usuarios
+                 LEFT JOIN telefones on usuarios.id = telefones.usuario_id
+                 LEFT JOIN veiculos on veiculos.usuario_id = usuarios.id
+                 INNER JOIN enderecos on usuarios.endereco_id = enderecos.id
+    </select>
+    <select id="find" resultMap="usuario">
+        SELECT *
+        FROM usuarios
+                 LEFT JOIN telefones on usuarios.id = telefones.usuario_id
+                 LEFT JOIN veiculos on veiculos.usuario_id = usuarios.id
+                 INNER JOIN enderecos on usuarios.endereco_id = enderecos.id
+        where usuarios.id = #{id}
+    </select>
+
+</mapper>

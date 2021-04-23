@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="br.edu.ifma.travis.mapper.VeiculoMapper">
+    <resultMap id="veiculo" type="br.edu.ifma.travis.model.Veiculo">
+        <id property="id" column="veiculos.id" />
+        <result property="marca" column="marca"/>
+        <result property="modelo" column="modelo"/>
+        <result property="placa" column="placa"/>
+        <result property="ano" column="ano"/>
+        <result property="cor" column="cor"/>
+        <association property="proprietario" resultMap="br.edu.ifma.travis.mapper.UsuarioMapper.usuario"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        insert into veiculos(marca, modelo, ano, placa, usuario_id)
+        values (#{veiculo.marca}, #{veiculo.modelo}, #{veiculo.ano}, #{veiculo.placa}, #{idUsuario});
+
+    </insert>
+
+    <update id="update">
+        update veiculos
+        SET marca  = #{veiculo.marca},
+            modelo = #{veiculo.modelo},
+            ano    = #{veiculo.ano},
+            placa  = #{veiculo.placa},
+            cor    = #{veiculo.cor}
+        where id = #{veiculo.id}
+    </update>
+
+    <delete id="delete">
+        delete
+        from veiculos
+        where id = #{idVeiculo}
+        LIMIT 1
+    </delete>
+
+    <select id="findAllByUsuario" resultMap="veiculo">
+        select *
+        from veiculos
+                 inner join usuarios on veiculos.usuario_id = usuarios.id
+        where usuario_id = #{usuario}
+    </select>
+
+    <select id="findByUsuarioAndId" resultMap="veiculo">
+        select *
+        from veiculos
+                 inner join usuarios on veiculos.usuario_id = usuarios.id
+        where usuario_id = #{idUsuario}
+          and veiculos.id = #{id}
+
+    </select>
+    <select id="findBySelo" resultMap="veiculo">
+        select *
+        from veiculos
+        where  selo = #{selo}
+    </select>
+    <select id="findByPlaca" resultMap="veiculo">
+        select *
+        from veiculos
+        where  placa LIKE '#{placa}'
+    </select>
+</mapper>
