@@ -10,3 +10,17 @@
 .idea/libraries/Maven__ch_qos_logback_logback_core_1_2_3.xml
 
 .idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_11_4.xml
+
+.mvn/
+
+target/
+
+.idea/
+
+garagem.iml
+
+HELP.md
+
+mvnw
+
+mvnw.cmd
