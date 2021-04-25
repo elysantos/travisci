@@ -1,1 +1,10 @@
 language: java
+addons:
+  sonarcloud:
+    organization: "elysantos" # the key of the org you chose at step #3
+script:
+  # other script steps might be done before running the actual analysis
+  - sonar-scanner
+# Don't copy the following part if you are using this project as a starting point of yours
+notifications:
+  email: false
