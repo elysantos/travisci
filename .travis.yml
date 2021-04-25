@@ -1,15 +1,15 @@
 language: java
-sudo: required
-addons:
-  sonarcloud:
-    organization: "elysantos"
-    token:
-      secure: "SONAR_TOKEN"
-cache:
-  directories:
-    - '$HOME/.sonar/cache'
-script:
-  - mvn clean verify sonar:sonar -Pcoverage -Dsonar.projectKey=elysantos
+#sudo: required
+#addons:
+#  sonarcloud:
+#    organization: "elysantos"
+#    token:
+#      secure: "SONAR_TOKEN"
+#cache:
+#  directories:
+#    - '$HOME/.sonar/cache'
+#script:
+#  - mvn clean verify sonar:sonar -Pcoverage -Dsonar.projectKey=elysantos
 
 notifications:
   email: false
